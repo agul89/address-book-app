@@ -25,10 +25,12 @@ var Contacts = {
                 email: this.email.value
             };
             if (entry.id == 0) { // add
+                Contacts.validateEmail(entry);
                 Contacts.storageAdd(entry);
                 Contacts.tableAdd(entry);
             }
             else { // edit
+                Contacts.validateEmail(entry);
                 Contacts.storageEdit(entry);
                 Contacts.tableEdit(entry);
             }
@@ -125,6 +127,18 @@ var Contacts = {
 
     tableRemove: function(entry) {
         Contacts.$table.removeChild(document.getElementById("entry-"+ entry.id));
+    },
+
+    validateEmail: function(entry) {
+
+        var email = document.getElementById('email'),
+            filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+        if (!filter.test(email.value)) {
+            alert('Please provide a valid email address');
+            Contacts.storageRemove().tableRemove();
+            return false;
+        }
     }
 };
 Contacts.initialize();
